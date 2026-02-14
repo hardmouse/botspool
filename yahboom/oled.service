@@ -1,0 +1,15 @@
+[Unit]
+Description=OLED Stats Display
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/futung/yahboom
+ExecStart=/usr/bin/python3 /home/futung/yahboom/oled.py
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
