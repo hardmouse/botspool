@@ -23,14 +23,14 @@ RATE="${RATE:-16000}"
 WORKDIR="${WORKDIR:-/home/futung/test}"
 
 # Wake word settings
-WAKE_PHRASE="${WAKE_PHRASE:-base bot}"     # what you say
-WAKE_CHUNK_SEC="${WAKE_CHUNK_SEC:-2.0}"    # record chunk size while waiting
-WAKE_GAIN_DB="${WAKE_GAIN_DB:-12}"         # boost wake chunks
+WAKE_PHRASE="${WAKE_PHRASE:-hey base}"     # what you say
+WAKE_CHUNK_SEC="${WAKE_CHUNK_SEC:-3.0}"    # record chunk size while waiting
+WAKE_GAIN_DB="${WAKE_GAIN_DB:-18}"         # boost wake chunks
 WAKE_COOLDOWN_SEC="${WAKE_COOLDOWN_SEC:-1}" # prevent double-trigger
 
 # Command capture settings
 CMD_MAX_SEC="${CMD_MAX_SEC:-10}"           # record up to 10 seconds after wake
-CMD_GAIN_DB="${CMD_GAIN_DB:-12}"           # boost command audio
+CMD_GAIN_DB="${CMD_GAIN_DB:-18}"           # boost command audio
 # Silence trim: stop after ~0.7s of silence at end, remove leading silence too
 SILENCE_STOP_SEC="${SILENCE_STOP_SEC:-0.7}"
 SILENCE_THRESH="${SILENCE_THRESH:-1%}"
@@ -254,7 +254,7 @@ while true; do
 
   # --- Fuzzy wake match ---
   wake_hit=0
-  w="$(echo "$WAKE_TEXT" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9 \n')"
+  w="$(echo "$WAKE_TEXT" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9 \n\t')"
 
   # Accept variations
   if echo "$w" | grep -Eq '\bbase\b.*\bbot\b'; then wake_hit=1; fi
@@ -262,7 +262,13 @@ while true; do
   if echo "$w" | grep -Eq '\bhey\b.*\bbase\b'; then wake_hit=1; fi
   if echo "$w" | grep -Eq '\bokay\b.*\bbase\b|\bok\b.*\bbase\b'; then wake_hit=1; fi
 
-[[ "$DEBUG" == "1" ]] && echo "DEBUG: normalized wake text: $w (wake_hit=$wake_hit)"
+  if echo "$w" | grep -Eq '\bbass\b.*\bbot\b'; then wake_hit=1; fi
+  if echo "$w" | grep -Eq '\bbase\b.*\bbut\b'; then wake_hit=1; fi
+  if echo "$w" | grep -Eq '\bbaseball\b'; then wake_hit=1; fi
+
+  if echo "$w" | grep -Eq '\bhey\b.*\bbass\b'; then wake_hit=1; fi
+
+  [[ "$DEBUG" == "1" ]] && echo "DEBUG: normalized wake text: $w (wake_hit=$wake_hit)"
 
   # Only print wake detected when it's TRUE
   if [[ "$wake_hit" == "1" ]]; then

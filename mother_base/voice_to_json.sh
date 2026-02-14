@@ -42,7 +42,7 @@ Output MUST be raw JSON only: no markdown, no code fences, no backticks, no expl
 Output must start with { and end with }.
 
 JSON schema:
-{"intent":"command|clarify|status","target":"worker1|worker2|all|mother","action":"power_on|power_off|move|stop|say|ping","args":{},"confirm":false}
+{"intent":"command|clarify|status","target":"worker|worker1|worker2|all|mother","action":"power_on|power_off|move|stop|say|ping","args":{},"confirm":false}
 
 Rules:
 - Use only the allowed enum values exactly.
